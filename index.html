@@ -1,0 +1,1141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kai Digital Studio</title>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&family=Arimo:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --white: #ffffff;
+  --lavender: #c9cef4;
+  --blue: #758bee;
+  --pink: #e880e5;
+  --navy: #27187e;
+}
+
+html { scroll-behavior: smooth; overflow-x: hidden; }
+
+body {
+  font-family: 'Arimo', sans-serif;
+  color: var(--navy);
+  background: var(--white);
+  overflow-x: hidden;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Oswald', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* ── NAV ── */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 1000;
+  padding: 1.2rem 3rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(255,255,255,0.85);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(201,206,244,0.4);
+  transition: all 0.4s ease;
+}
+nav.scrolled { padding: 0.8rem 3rem; box-shadow: 0 2px 30px rgba(39,24,126,0.08); }
+.nav-logo { font-family: 'Oswald', sans-serif; font-size: 1.6rem; font-weight: 700; color: var(--navy); }
+.nav-logo span { color: var(--pink); }
+.nav-links { display: flex; gap: 2.4rem; list-style: none; }
+.nav-links a {
+  font-family: 'Arimo', sans-serif;
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--navy);
+  text-decoration: none;
+  position: relative;
+  transition: color 0.3s;
+}
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: -4px; left: 0;
+  width: 0; height: 2px;
+  background: var(--pink);
+  transition: width 0.3s ease;
+}
+.nav-links a:hover { color: var(--blue); }
+.nav-links a:hover::after { width: 100%; }
+
+/* ── SECTIONS ── */
+section {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+/* ── HERO ── */
+.hero {
+  background: linear-gradient(160deg, var(--navy) 0%, #3a2aae 50%, var(--blue) 100%);
+  color: var(--white);
+  text-align: center;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 2rem;
+}
+.hero-particles {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+.particle {
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0.3;
+  animation: float linear infinite;
+}
+@keyframes float {
+  0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+  10% { opacity: 0.3; }
+  90% { opacity: 0.3; }
+  100% { transform: translateY(-10vh) rotate(720deg); opacity: 0; }
+}
+.hero-badge {
+  display: inline-block;
+  padding: 0.5rem 1.6rem;
+  border: 1px solid rgba(201,206,244,0.4);
+  border-radius: 50px;
+  font-size: 0.85rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  opacity: 0;
+  animation: fadeUp 1s 0.3s forwards;
+}
+.hero h1 {
+  font-size: clamp(3rem, 8vw, 7rem);
+  line-height: 1.05;
+  font-weight: 700;
+  opacity: 0;
+  animation: fadeUp 1s 0.5s forwards;
+}
+.hero h1 .accent { color: var(--pink); }
+.hero p {
+  font-size: clamp(1rem, 2vw, 1.3rem);
+  max-width: 600px;
+  line-height: 1.7;
+  opacity: 0.85;
+  opacity: 0;
+  animation: fadeUp 1s 0.7s forwards;
+}
+.hero-cta {
+  display: flex; gap: 1rem;
+  flex-wrap: wrap; justify-content: center;
+  opacity: 0;
+  animation: fadeUp 1s 0.9s forwards;
+}
+.btn {
+  display: inline-block;
+  padding: 1rem 2.5rem;
+  border-radius: 50px;
+  font-family: 'Oswald', sans-serif;
+  font-size: 1rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  text-decoration: none;
+  transition: all 0.4s ease;
+  cursor: pointer;
+  border: none;
+}
+.btn-primary { background: var(--pink); color: var(--white); }
+.btn-primary:hover { background: #d060d0; transform: translateY(-3px); box-shadow: 0 10px 30px rgba(232,128,229,0.4); }
+.btn-outline { background: transparent; color: var(--white); border: 2px solid rgba(255,255,255,0.4); }
+.btn-outline:hover { border-color: var(--white); transform: translateY(-3px); }
+.scroll-indicator {
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0;
+  animation: fadeUp 1s 1.2s forwards;
+}
+.scroll-indicator .mouse {
+  width: 26px; height: 42px;
+  border: 2px solid rgba(255,255,255,0.5);
+  border-radius: 14px;
+  display: flex; justify-content: center; padding-top: 8px;
+}
+.scroll-indicator .wheel {
+  width: 4px; height: 8px;
+  background: var(--white);
+  border-radius: 2px;
+  animation: scrollWheel 1.8s infinite;
+}
+@keyframes scrollWheel {
+  0% { transform: translateY(0); opacity: 1; }
+  100% { transform: translateY(12px); opacity: 0; }
+}
+
+@keyframes fadeUp {
+  from { transform: translateY(40px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+/* ── ANIMATED ELEMENTS ── */
+.reveal {
+  opacity: 0;
+  transform: translateY(80px);
+  transition: all 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.reveal.active {
+  opacity: 1;
+  transform: translateY(0);
+}
+.reveal-left {
+  opacity: 0;
+  transform: translateX(-120px);
+  transition: all 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.reveal-left.active { opacity: 1; transform: translateX(0); }
+.reveal-right {
+  opacity: 0;
+  transform: translateX(120px);
+  transition: all 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.reveal-right.active { opacity: 1; transform: translateX(0); }
+.reveal-scale {
+  opacity: 0;
+  transform: scale(0.8);
+  transition: all 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.reveal-scale.active { opacity: 1; transform: scale(1); }
+.reveal-rotate {
+  opacity: 0;
+  transform: rotate(-8deg) translateY(60px);
+  transition: all 1s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.reveal-rotate.active { opacity: 1; transform: rotate(0) translateY(0); }
+
+.stagger-1 { transition-delay: 0.1s; }
+.stagger-2 { transition-delay: 0.2s; }
+.stagger-3 { transition-delay: 0.3s; }
+.stagger-4 { transition-delay: 0.4s; }
+.stagger-5 { transition-delay: 0.5s; }
+.stagger-6 { transition-delay: 0.6s; }
+
+/* ── ABOUT SECTION ── */
+.about {
+  background: var(--white);
+  padding: 8rem 3rem;
+}
+.about-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5rem;
+  align-items: center;
+}
+.about-visual {
+  position: relative;
+  height: 500px;
+}
+.about-shape {
+  position: absolute;
+  border-radius: 20px;
+  transition: transform 0.4s ease;
+}
+.about-shape:nth-child(1) {
+  width: 300px; height: 300px;
+  background: linear-gradient(135deg, var(--lavender), var(--blue));
+  top: 0; left: 0;
+  animation: morph 8s infinite;
+}
+.about-shape:nth-child(2) {
+  width: 220px; height: 220px;
+  background: linear-gradient(135deg, var(--pink), #c060c0);
+  bottom: 40px; right: 20px;
+  animation: morph 8s 2s infinite;
+}
+.about-shape:nth-child(3) {
+  width: 150px; height: 150px;
+  background: linear-gradient(135deg, var(--navy), var(--blue));
+  top: 60px; right: 60px;
+  animation: morph 8s 4s infinite;
+}
+@keyframes morph {
+  0%, 100% { border-radius: 20px; }
+  25% { border-radius: 50% 20px 50% 20px; }
+  50% { border-radius: 20px 50% 20px 50%; }
+  75% { border-radius: 50% 20px 20px 50%; }
+}
+.about-text .section-label {
+  font-family: 'Arimo', sans-serif;
+  font-weight: 700;
+  font-size: 0.8rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--pink);
+  margin-bottom: 1rem;
+}
+.about-text h2 {
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  line-height: 1.15;
+  color: var(--navy);
+  margin-bottom: 1.5rem;
+}
+.about-text p {
+  font-size: 1.05rem;
+  line-height: 1.8;
+  color: #555;
+  margin-bottom: 1rem;
+}
+.stat-row {
+  display: flex;
+  gap: 2.5rem;
+  margin-top: 2rem;
+}
+.stat { text-align: left; }
+.stat-number {
+  font-family: 'Oswald', sans-serif;
+  font-size: 2.8rem;
+  font-weight: 700;
+  color: var(--blue);
+  line-height: 1;
+}
+.stat-label {
+  font-size: 0.85rem;
+  color: #888;
+  margin-top: 0.3rem;
+}
+
+/* ── SERVICES ── */
+.services {
+  background: linear-gradient(180deg, var(--lavender) 0%, var(--white) 100%);
+  padding: 8rem 3rem;
+  flex-direction: column;
+  gap: 4rem;
+}
+.section-header {
+  text-align: center;
+  max-width: 700px;
+}
+.section-header .section-label {
+  font-family: 'Arimo', sans-serif;
+  font-weight: 700;
+  font-size: 0.8rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--pink);
+  margin-bottom: 1rem;
+}
+.section-header h2 {
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  color: var(--navy);
+  margin-bottom: 1rem;
+}
+.section-header p {
+  font-size: 1.05rem;
+  color: #666;
+  line-height: 1.7;
+}
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  max-width: 1200px;
+  width: 100%;
+}
+.service-card {
+  background: var(--white);
+  border-radius: 20px;
+  padding: 2.5rem;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 30px rgba(39,24,126,0.06);
+}
+.service-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 4px;
+  background: linear-gradient(90deg, var(--blue), var(--pink));
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.5s ease;
+}
+.service-card:hover::before { transform: scaleX(1); }
+.service-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 20px 60px rgba(39,24,126,0.12);
+}
+.service-icon {
+  width: 60px; height: 60px;
+  border-radius: 16px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.6rem;
+  margin-bottom: 1.5rem;
+}
+.service-icon.blue { background: rgba(117,139,238,0.12); color: var(--blue); }
+.service-icon.pink { background: rgba(232,128,229,0.12); color: var(--pink); }
+.service-icon.navy { background: rgba(39,24,126,0.08); color: var(--navy); }
+.service-card h3 {
+  font-size: 1.3rem;
+  color: var(--navy);
+  margin-bottom: 0.8rem;
+}
+.service-card p {
+  font-size: 0.95rem;
+  color: #666;
+  line-height: 1.7;
+}
+
+/* ── PORTFOLIO / SHOWCASE ── */
+.showcase {
+  background: var(--navy);
+  color: var(--white);
+  padding: 8rem 3rem;
+  flex-direction: column;
+  gap: 4rem;
+}
+.showcase .section-header .section-label { color: var(--pink); }
+.showcase .section-header h2 { color: var(--white); }
+.showcase .section-header p { color: rgba(255,255,255,0.6); }
+.showcase-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
+  max-width: 1100px;
+  width: 100%;
+}
+.showcase-item {
+  border-radius: 20px;
+  overflow: hidden;
+  position: relative;
+  height: 350px;
+  cursor: pointer;
+  transition: transform 0.5s ease;
+}
+.showcase-item:hover { transform: scale(1.03); }
+.showcase-item:nth-child(1) { background: linear-gradient(135deg, var(--blue), var(--pink)); }
+.showcase-item:nth-child(2) { background: linear-gradient(135deg, var(--pink), #c060c0); }
+.showcase-item:nth-child(3) { background: linear-gradient(135deg, var(--lavender), var(--blue)); }
+.showcase-item:nth-child(4) { background: linear-gradient(135deg, #3a2aae, var(--navy)); }
+.showcase-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(39,24,126,0.6);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 2rem;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+.showcase-item:hover .showcase-overlay { opacity: 1; }
+.showcase-overlay h3 { font-size: 1.5rem; margin-bottom: 0.5rem; }
+.showcase-overlay p { font-size: 0.9rem; opacity: 0.8; }
+.showcase-pattern {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.showcase-pattern svg {
+  width: 60%;
+  height: 60%;
+  opacity: 0.15;
+}
+
+/* ── PROCESS / TIMELINE ── */
+.process {
+  background: var(--white);
+  padding: 8rem 3rem;
+  flex-direction: column;
+  gap: 4rem;
+}
+.timeline {
+  max-width: 900px;
+  width: 100%;
+  position: relative;
+}
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 0; bottom: 0;
+  width: 3px;
+  background: linear-gradient(to bottom, var(--blue), var(--pink), var(--navy));
+}
+.timeline-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 4rem;
+  position: relative;
+}
+.timeline-item:nth-child(odd) { flex-direction: row; }
+.timeline-item:nth-child(even) { flex-direction: row-reverse; }
+.timeline-content {
+  width: 45%;
+  padding: 2rem;
+  background: var(--white);
+  border-radius: 16px;
+  box-shadow: 0 4px 30px rgba(39,24,126,0.06);
+}
+.timeline-dot {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 20px; height: 20px;
+  border-radius: 50%;
+  background: var(--pink);
+  border: 4px solid var(--white);
+  box-shadow: 0 0 0 4px var(--pink);
+  z-index: 1;
+}
+.timeline-number {
+  font-family: 'Oswald', sans-serif;
+  font-size: 3rem;
+  font-weight: 700;
+  color: var(--lavender);
+  line-height: 1;
+  margin-bottom: 0.5rem;
+}
+.timeline-content h3 {
+  font-size: 1.2rem;
+  color: var(--navy);
+  margin-bottom: 0.5rem;
+}
+.timeline-content p {
+  font-size: 0.95rem;
+  color: #666;
+  line-height: 1.6;
+}
+
+/* ── TESTIMONIALS ── */
+.testimonials {
+  background: linear-gradient(160deg, var(--navy) 0%, #3a2aae 100%);
+  color: var(--white);
+  padding: 8rem 3rem;
+  flex-direction: column;
+  gap: 4rem;
+}
+.testimonials .section-header .section-label { color: var(--pink); }
+.testimonials .section-header h2 { color: var(--white); }
+.testimonials .section-header p { color: rgba(255,255,255,0.6); }
+.testimonial-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  max-width: 1200px;
+  width: 100%;
+}
+.testimonial-card {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 20px;
+  padding: 2.5rem;
+  backdrop-filter: blur(10px);
+  transition: all 0.4s ease;
+}
+.testimonial-card:hover {
+  background: rgba(255,255,255,0.1);
+  transform: translateY(-6px);
+}
+.testimonial-quote {
+  font-size: 2.5rem;
+  color: var(--pink);
+  line-height: 1;
+  margin-bottom: 1rem;
+}
+.testimonial-card p {
+  font-size: 0.95rem;
+  line-height: 1.7;
+  opacity: 0.85;
+  margin-bottom: 1.5rem;
+}
+.testimonial-author {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.testimonial-avatar {
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Oswald', sans-serif;
+  font-weight: 700;
+  font-size: 1rem;
+}
+.testimonial-avatar.av1 { background: linear-gradient(135deg, var(--blue), var(--pink)); }
+.testimonial-avatar.av2 { background: linear-gradient(135deg, var(--pink), #c060c0); }
+.testimonial-avatar.av3 { background: linear-gradient(135deg, var(--lavender), var(--blue)); }
+.testimonial-name { font-family: 'Oswald', sans-serif; font-weight: 500; font-size: 0.95rem; }
+.testimonial-role { font-size: 0.8rem; opacity: 0.5; }
+
+/* ── CTA SECTION ── */
+.cta-section {
+  background: var(--white);
+  padding: 8rem 3rem;
+  flex-direction: column;
+  gap: 2rem;
+  text-align: center;
+  position: relative;
+}
+.cta-section::before {
+  content: '';
+  position: absolute;
+  width: 500px; height: 500px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(201,206,244,0.4), transparent 70%);
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+.cta-section h2 {
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  color: var(--navy);
+  z-index: 1;
+}
+.cta-section h2 .accent { color: var(--pink); }
+.cta-section p {
+  font-size: 1.1rem;
+  color: #666;
+  max-width: 550px;
+  line-height: 1.7;
+  z-index: 1;
+}
+.cta-section .btn-primary {
+  background: var(--navy);
+  font-size: 1.05rem;
+  padding: 1.1rem 3rem;
+  z-index: 1;
+}
+.cta-section .btn-primary:hover {
+  background: #3a2aae;
+  box-shadow: 0 10px 30px rgba(39,24,126,0.3);
+}
+
+/* ── FOOTER ── */
+footer {
+  background: var(--navy);
+  color: var(--white);
+  padding: 4rem 3rem 2rem;
+}
+.footer-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 3rem;
+  margin-bottom: 3rem;
+}
+.footer-brand .nav-logo { font-size: 1.8rem; margin-bottom: 1rem; }
+.footer-brand p { font-size: 0.9rem; opacity: 0.5; line-height: 1.7; max-width: 300px; }
+.footer-col h4 {
+  font-family: 'Oswald', sans-serif;
+  font-size: 0.9rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin-bottom: 1.2rem;
+  color: var(--pink);
+}
+.footer-col a {
+  display: block;
+  color: rgba(255,255,255,0.5);
+  text-decoration: none;
+  font-size: 0.9rem;
+  margin-bottom: 0.7rem;
+  transition: color 0.3s;
+}
+.footer-col a:hover { color: var(--white); }
+.footer-bottom {
+  border-top: 1px solid rgba(255,255,255,0.08);
+  padding-top: 2rem;
+  text-align: center;
+  font-size: 0.85rem;
+  opacity: 0.4;
+}
+
+/* ── HORIZONTAL SCROLL MARQUEE ── */
+.marquee-section {
+  background: var(--lavender);
+  padding: 1.5rem 0;
+  overflow: hidden;
+}
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee 20s linear infinite;
+}
+.marquee-track span {
+  font-family: 'Oswald', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--navy);
+  padding: 0 2rem;
+  white-space: nowrap;
+}
+.marquee-track .dot {
+  color: var(--pink);
+  padding: 0 0.5rem;
+}
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* ── COUNTER ANIMATION ── */
+.counter { display: inline-block; }
+
+/* ── PROGRESS BARS (in services) ── */
+.skill-bar {
+  height: 6px;
+  background: var(--lavender);
+  border-radius: 3px;
+  margin-top: 1rem;
+  overflow: hidden;
+}
+.skill-bar-fill {
+  height: 100%;
+  border-radius: 3px;
+  background: linear-gradient(90deg, var(--blue), var(--pink));
+  width: 0;
+  transition: width 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.skill-bar-fill.active { width: var(--fill); }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 900px) {
+  .about-inner { grid-template-columns: 1fr; gap: 3rem; }
+  .about-visual { height: 300px; }
+  .services-grid { grid-template-columns: 1fr; }
+  .showcase-grid { grid-template-columns: 1fr; }
+  .testimonial-cards { grid-template-columns: 1fr; }
+  .timeline::before { left: 20px; }
+  .timeline-item, .timeline-item:nth-child(even) { flex-direction: row; }
+  .timeline-content { width: calc(100% - 60px); margin-left: 60px; }
+  .timeline-dot { left: 20px; }
+  .footer-inner { grid-template-columns: 1fr 1fr; }
+  nav { padding: 1rem 1.5rem; }
+  .nav-links { gap: 1.2rem; }
+}
+@media (max-width: 600px) {
+  .footer-inner { grid-template-columns: 1fr; }
+  .stat-row { flex-direction: column; gap: 1.5rem; }
+  .hero h1 { font-size: 2.8rem; }
+  .nav-links { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="navbar">
+  <div class="nav-logo">KAI<span>.</span></div>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#work">Work</a></li>
+    <li><a href="#process">Process</a></li>
+    <li><a href="#testimonials">Voices</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-particles" id="particles"></div>
+  <div class="hero-badge">Creative Digital Agency</div>
+  <h1>We Build<br><span class="accent">Digital</span> Worlds</h1>
+  <p>Kai Digital Studio crafts immersive digital experiences where design meets technology and imagination becomes reality.</p>
+  <div class="hero-cta">
+    <a href="#work" class="btn btn-primary">See Our Work</a>
+    <a href="#contact" class="btn btn-outline">Get In Touch</a>
+  </div>
+  <div class="scroll-indicator">
+    <div class="mouse"><div class="wheel"></div></div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-section">
+  <div class="marquee-track">
+    <span>Branding</span><span class="dot">&bull;</span>
+    <span>Web Design</span><span class="dot">&bull;</span>
+    <span>Development</span><span class="dot">&bull;</span>
+    <span>Motion</span><span class="dot">&bull;</span>
+    <span>Strategy</span><span class="dot">&bull;</span>
+    <span>UI/UX</span><span class="dot">&bull;</span>
+    <span>3D Design</span><span class="dot">&bull;</span>
+    <span>Photography</span><span class="dot">&bull;</span>
+    <span>Branding</span><span class="dot">&bull;</span>
+    <span>Web Design</span><span class="dot">&bull;</span>
+    <span>Development</span><span class="dot">&bull;</span>
+    <span>Motion</span><span class="dot">&bull;</span>
+    <span>Strategy</span><span class="dot">&bull;</span>
+    <span>UI/UX</span><span class="dot">&bull;</span>
+    <span>3D Design</span><span class="dot">&bull;</span>
+    <span>Photography</span><span class="dot">&bull;</span>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section class="about" id="about">
+  <div class="about-inner">
+    <div class="about-visual reveal-left">
+      <div class="about-shape"></div>
+      <div class="about-shape"></div>
+      <div class="about-shape"></div>
+    </div>
+    <div class="about-text">
+      <div class="section-label reveal stagger-1">Who We Are</div>
+      <h2 class="reveal stagger-2">We Turn Bold Ideas Into<br>Stunning Realities</h2>
+      <p class="reveal stagger-3">Kai Digital Studio is a collective of designers, developers, and storytellers who believe in the power of digital craft. We don't just build websites — we create experiences that move people.</p>
+      <p class="reveal stagger-4">Founded on the principle that great design should feel effortless, we obsess over every pixel, every interaction, every moment of delight.</p>
+      <div class="stat-row reveal stagger-5">
+        <div class="stat">
+          <div class="stat-number"><span class="counter" data-target="150">0</span>+</div>
+          <div class="stat-label">Projects Delivered</div>
+        </div>
+        <div class="stat">
+          <div class="stat-number"><span class="counter" data-target="40">0</span>+</div>
+          <div class="stat-label">Global Clients</div>
+        </div>
+        <div class="stat">
+          <div class="stat-number"><span class="counter" data-target="12">0</span></div>
+          <div class="stat-label">Awards Won</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section class="services" id="services">
+  <div class="section-header">
+    <div class="section-label reveal">What We Do</div>
+    <h2 class="reveal stagger-1">Services Built for Impact</h2>
+    <p class="reveal stagger-2">From concept to launch, we deliver end-to-end digital solutions that drive growth and leave lasting impressions.</p>
+  </div>
+  <div class="services-grid">
+    <div class="service-card reveal stagger-1">
+      <div class="service-icon blue">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
+      </div>
+      <h3>Web Design</h3>
+      <p>Pixel-perfect interfaces that captivate users and convert visitors into loyal customers.</p>
+      <div class="skill-bar"><div class="skill-bar-fill" style="--fill: 95%"></div></div>
+    </div>
+    <div class="service-card reveal stagger-2">
+      <div class="service-icon pink">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+      </div>
+      <h3>Brand Identity</h3>
+      <p>Strategic brand systems that tell your story with clarity, consistency, and soul.</p>
+      <div class="skill-bar"><div class="skill-bar-fill" style="--fill: 90%"></div></div>
+    </div>
+    <div class="service-card reveal stagger-3">
+      <div class="service-icon navy">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+      </div>
+      <h3>Development</h3>
+      <p>Clean, scalable code that brings designs to life with performance and precision.</p>
+      <div class="skill-bar"><div class="skill-bar-fill" style="--fill: 92%"></div></div>
+    </div>
+    <div class="service-card reveal stagger-4">
+      <div class="service-icon pink">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+      </div>
+      <h3>UX Strategy</h3>
+      <p>Research-driven design decisions that put your users first and your metrics up.</p>
+      <div class="skill-bar"><div class="skill-bar-fill" style="--fill: 88%"></div></div>
+    </div>
+    <div class="service-card reveal stagger-5">
+      <div class="service-icon blue">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+      </div>
+      <h3>Motion Design</h3>
+      <p>Captivating animations and micro-interactions that breathe life into every screen.</p>
+      <div class="skill-bar"><div class="skill-bar-fill" style="--fill: 85%"></div></div>
+    </div>
+    <div class="service-card reveal stagger-6">
+      <div class="service-icon navy">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+      </div>
+      <h3>3D & Immersive</h3>
+      <p>Next-gen digital experiences using WebGL, Three.js, and spatial design techniques.</p>
+      <div class="skill-bar"><div class="skill-bar-fill" style="--fill: 80%"></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- SHOWCASE -->
+<section class="showcase" id="work">
+  <div class="section-header">
+    <div class="section-label reveal">Selected Work</div>
+    <h2 class="reveal stagger-1">Projects We're Proud Of</h2>
+    <p class="reveal stagger-2">A curated selection of our latest digital creations spanning brand, web, and immersive.</p>
+  </div>
+  <div class="showcase-grid">
+    <div class="showcase-item reveal-scale stagger-1">
+      <div class="showcase-pattern">
+        <svg viewBox="0 0 200 200"><circle cx="100" cy="100" r="80" fill="none" stroke="white" stroke-width="0.5"/><circle cx="100" cy="100" r="60" fill="none" stroke="white" stroke-width="0.5"/><circle cx="100" cy="100" r="40" fill="none" stroke="white" stroke-width="0.5"/><line x1="20" y1="100" x2="180" y2="100" stroke="white" stroke-width="0.5"/><line x1="100" y1="20" x2="100" y2="180" stroke="white" stroke-width="0.5"/></svg>
+      </div>
+      <div class="showcase-overlay">
+        <h3>Lumina Labs</h3>
+        <p>Full-stack brand identity and web platform for a biotech startup</p>
+      </div>
+    </div>
+    <div class="showcase-item reveal-scale stagger-2">
+      <div class="showcase-pattern">
+        <svg viewBox="0 0 200 200"><rect x="40" y="40" width="120" height="120" fill="none" stroke="white" stroke-width="0.5" transform="rotate(15 100 100)"/><rect x="60" y="60" width="80" height="80" fill="none" stroke="white" stroke-width="0.5" transform="rotate(30 100 100)"/><rect x="80" y="80" width="40" height="40" fill="none" stroke="white" stroke-width="0.5" transform="rotate(45 100 100)"/></svg>
+      </div>
+      <div class="showcase-overlay">
+        <h3>Neon Collective</h3>
+        <p>E-commerce experience for a streetwear brand with immersive 3D product views</p>
+      </div>
+    </div>
+    <div class="showcase-item reveal-scale stagger-3">
+      <div class="showcase-pattern">
+        <svg viewBox="0 0 200 200"><polygon points="100,20 180,80 150,170 50,170 20,80" fill="none" stroke="white" stroke-width="0.5"/><polygon points="100,50 155,90 140,150 60,150 45,90" fill="none" stroke="white" stroke-width="0.5"/></svg>
+      </div>
+      <div class="showcase-overlay">
+        <h3>Aether Sound</h3>
+        <p>Interactive audio visualization platform for an indie music label</p>
+      </div>
+    </div>
+    <div class="showcase-item reveal-scale stagger-4">
+      <div class="showcase-pattern">
+        <svg viewBox="0 0 200 200"><path d="M100 20 Q180 100 100 180 Q20 100 100 20" fill="none" stroke="white" stroke-width="0.5"/><path d="M60 40 Q140 100 60 160" fill="none" stroke="white" stroke-width="0.5"/><path d="M140 40 Q60 100 140 160" fill="none" stroke="white" stroke-width="0.5"/></svg>
+      </div>
+      <div class="showcase-overlay">
+        <h3>Vero Finance</h3>
+        <p>Dashboard design system and mobile banking app for a fintech disruptor</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section class="process" id="process">
+  <div class="section-header">
+    <div class="section-label reveal">How We Work</div>
+    <h2 class="reveal stagger-1">Our Creative Process</h2>
+    <p class="reveal stagger-2">A proven four-step methodology that transforms your vision into a digital masterpiece.</p>
+  </div>
+  <div class="timeline">
+    <div class="timeline-item">
+      <div class="timeline-content reveal-left">
+        <div class="timeline-number">01</div>
+        <h3>Discovery</h3>
+        <p>We immerse ourselves in your world — your brand, your audience, your goals. Research fuels everything we do.</p>
+      </div>
+      <div class="timeline-dot"></div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-content reveal-right">
+        <div class="timeline-number">02</div>
+        <h3>Design</h3>
+        <p>From wireframes to high-fidelity prototypes, we craft every detail with intentionality and precision.</p>
+      </div>
+      <div class="timeline-dot"></div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-content reveal-left">
+        <div class="timeline-number">03</div>
+        <h3>Develop</h3>
+        <p>Our engineers build with clean, modern stacks — optimized for speed, accessibility, and scale.</p>
+      </div>
+      <div class="timeline-dot"></div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-content reveal-right">
+        <div class="timeline-number">04</div>
+        <h3>Deliver</h3>
+        <p>Rigorous testing, seamless deployment, and ongoing support. We don't just launch — we elevate.</p>
+      </div>
+      <div class="timeline-dot"></div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials" id="testimonials">
+  <div class="section-header">
+    <div class="section-label reveal">Client Love</div>
+    <h2 class="reveal stagger-1">What People Say</h2>
+    <p class="reveal stagger-2">Don't take our word for it — hear from the teams we've had the privilege to work with.</p>
+  </div>
+  <div class="testimonial-cards">
+    <div class="testimonial-card reveal stagger-1">
+      <div class="testimonial-quote">&ldquo;</div>
+      <p>Kai transformed our entire digital presence. The attention to detail and creative vision exceeded every expectation we had.</p>
+      <div class="testimonial-author">
+        <div class="testimonial-avatar av1">ML</div>
+        <div>
+          <div class="testimonial-name">Maya Lin</div>
+          <div class="testimonial-role">CEO, Lumina Labs</div>
+        </div>
+      </div>
+    </div>
+    <div class="testimonial-card reveal stagger-2">
+      <div class="testimonial-quote">&ldquo;</div>
+      <p>Working with Kai felt like having a creative partner, not just an agency. They truly understood our brand and brought it to life.</p>
+      <div class="testimonial-author">
+        <div class="testimonial-avatar av2">JR</div>
+        <div>
+          <div class="testimonial-name">James Rivera</div>
+          <div class="testimonial-role">Founder, Neon Collective</div>
+        </div>
+      </div>
+    </div>
+    <div class="testimonial-card reveal stagger-3">
+      <div class="testimonial-quote">&ldquo;</div>
+      <p>The immersive experience they built for us drives 3x more engagement than our previous site. Absolutely world-class work.</p>
+      <div class="testimonial-author">
+        <div class="testimonial-avatar av3">SK</div>
+        <div>
+          <div class="testimonial-name">Sarah Kim</div>
+          <div class="testimonial-role">CMO, Vero Finance</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section" id="contact">
+  <h2 class="reveal">Ready to Build<br>Something <span class="accent">Amazing</span>?</h2>
+  <p class="reveal stagger-1">Let's turn your vision into a digital experience that moves people. Drop us a line — we'd love to hear from you.</p>
+  <a href="mailto:hello@kaistudio.co" class="btn btn-primary reveal stagger-2">Start a Project</a>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="nav-logo">KAI<span>.</span></div>
+      <p>Kai Digital Studio crafts immersive digital experiences at the intersection of design, technology, and storytelling.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Studio</h4>
+      <a href="#about">About</a>
+      <a href="#services">Services</a>
+      <a href="#work">Work</a>
+      <a href="#process">Process</a>
+    </div>
+    <div class="footer-col">
+      <h4>Connect</h4>
+      <a href="#">Twitter / X</a>
+      <a href="#">Instagram</a>
+      <a href="#">Dribbble</a>
+      <a href="#">LinkedIn</a>
+    </div>
+    <div class="footer-col">
+      <h4>Contact</h4>
+      <a href="mailto:hello@kaistudio.co">hello@kaistudio.co</a>
+      <a href="#">New York, NY</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    &copy; 2026 Kai Digital Studio. All rights reserved.
+  </div>
+</footer>
+
+<script>
+// ── Particles ──
+const particlesEl = document.getElementById('particles');
+for (let i = 0; i < 40; i++) {
+  const p = document.createElement('div');
+  p.classList.add('particle');
+  const size = Math.random() * 8 + 3;
+  const colors = ['#758bee', '#e880e5', '#c9cef4', '#ffffff'];
+  p.style.width = size + 'px';
+  p.style.height = size + 'px';
+  p.style.left = Math.random() * 100 + '%';
+  p.style.background = colors[Math.floor(Math.random() * colors.length)];
+  p.style.animationDuration = (Math.random() * 10 + 8) + 's';
+  p.style.animationDelay = (Math.random() * 10) + 's';
+  particlesEl.appendChild(p);
+}
+
+// ── Nav scroll ──
+const navbar = document.getElementById('navbar');
+window.addEventListener('scroll', () => {
+  navbar.classList.toggle('scrolled', window.scrollY > 50);
+});
+
+// ── Intersection Observer for reveals ──
+const observerOptions = {
+  threshold: 0.15,
+  rootMargin: '0px 0px -60px 0px'
+};
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('active');
+
+      // Trigger skill bar fills
+      entry.target.querySelectorAll('.skill-bar-fill').forEach(bar => {
+        bar.classList.add('active');
+      });
+
+      // Trigger counters
+      entry.target.querySelectorAll('.counter').forEach(counter => {
+        if (counter.dataset.animated) return;
+        counter.dataset.animated = 'true';
+        const target = +counter.dataset.target;
+        const duration = 2000;
+        const start = performance.now();
+        const animate = (now) => {
+          const elapsed = now - start;
+          const progress = Math.min(elapsed / duration, 1);
+          const eased = 1 - Math.pow(1 - progress, 3);
+          counter.textContent = Math.floor(eased * target);
+          if (progress < 1) requestAnimationFrame(animate);
+          else counter.textContent = target;
+        };
+        requestAnimationFrame(animate);
+      });
+    }
+  });
+}, observerOptions);
+
+document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale, .reveal-rotate').forEach(el => {
+  observer.observe(el);
+});
+
+// ── Parallax on scroll ──
+const aboutShapes = document.querySelectorAll('.about-shape');
+window.addEventListener('scroll', () => {
+  const scrollY = window.scrollY;
+  aboutShapes.forEach((shape, i) => {
+    const speed = (i + 1) * 0.03;
+    shape.style.transform = `translateY(${scrollY * speed}px)`;
+  });
+});
+
+// ── Smooth scroll for nav links ──
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    e.preventDefault();
+    const target = document.querySelector(a.getAttribute('href'));
+    if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+});
+</script>
+</body>
+</html>
