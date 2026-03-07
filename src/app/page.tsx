@@ -95,7 +95,7 @@ export default function Home() {
             </p>
             <motion.a
               href="#about"
-              className="inline-block px-14 py-6 bg-[#e880e5] text-white rounded-full font-semibold tracking-wider uppercase text-base shadow-lg shadow-[#e880e5]/30"
+              className="inline-block px-20 py-8 bg-[#e880e5] text-white rounded-full font-semibold tracking-wider uppercase text-lg shadow-lg shadow-[#e880e5]/30"
               whileHover={{ scale: 1.08, boxShadow: "0 20px 40px rgba(232,128,229,0.4)" }}
               whileTap={{ scale: 0.95 }}
             >
