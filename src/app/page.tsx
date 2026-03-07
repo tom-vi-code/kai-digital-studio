@@ -347,22 +347,6 @@ export default function Home() {
           style={{ opacity: heroOpacity, scale: heroScale, y: heroY }}
           className="relative z-10 text-center px-6 max-w-5xl"
         >
-          <motion.div
-            initial={{ opacity: 0, scale: 0.5, rotate: -10 }}
-            animate={{ opacity: 1, scale: 1, rotate: 0 }}
-            transition={{ duration: 1.2, ease: [0.34, 1.56, 0.64, 1] }}
-            className="mb-8"
-          >
-            <Image
-              src="/images/logo.png"
-              alt="Kai Digital Studio"
-              width={100}
-              height={100}
-              className="mx-auto rounded-full shadow-2xl"
-              priority
-            />
-          </motion.div>
-
           <h1 className="text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-bold tracking-tight leading-none mb-6">
             <LetterReveal text="KAI DIGITAL" />
             <br />
@@ -379,7 +363,7 @@ export default function Home() {
             </p>
             <motion.a
               href="#about"
-              className="inline-block px-10 py-4 bg-[#e880e5] text-white rounded-full font-semibold tracking-wider uppercase text-sm shadow-lg shadow-[#e880e5]/30"
+              className="inline-block px-14 py-6 bg-[#e880e5] text-white rounded-full font-semibold tracking-wider uppercase text-base shadow-lg shadow-[#e880e5]/30"
               whileHover={{ scale: 1.08, boxShadow: "0 20px 40px rgba(232,128,229,0.4)" }}
               whileTap={{ scale: 0.95 }}
             >
@@ -427,7 +411,7 @@ export default function Home() {
           <FadeSlideIn direction="up" delay={0.6}>
             <motion.a
               href="#connect"
-              className="inline-block mt-10 px-10 py-4 border-2 border-[#e880e5] text-[#e880e5] rounded-full font-semibold tracking-wider uppercase text-sm"
+              className="inline-block mt-10 px-14 py-6 border-2 border-[#e880e5] text-[#e880e5] rounded-full font-semibold tracking-wider uppercase text-base"
               whileHover={{
                 backgroundColor: "#e880e5",
                 color: "#ffffff",
@@ -521,7 +505,7 @@ export default function Home() {
               <FadeSlideIn direction="right" delay={0.4}>
                 <motion.a
                   href="#connect"
-                  className="inline-block px-8 py-3 bg-[#27187e] text-white rounded-full font-semibold tracking-wider uppercase text-sm"
+                  className="inline-block px-14 py-6 bg-[#27187e] text-white rounded-full font-semibold tracking-wider uppercase text-base"
                   whileHover={{ scale: 1.08, backgroundColor: "#758bee" }}
                   whileTap={{ scale: 0.95 }}
                 >
@@ -691,7 +675,7 @@ export default function Home() {
           <FadeSlideIn direction="up" delay={0.5}>
             <motion.a
               href="mailto:hello@kaidigitalstudio.com"
-              className="inline-block px-12 py-5 bg-[#e880e5] text-white rounded-full font-bold tracking-wider uppercase text-base shadow-2xl shadow-[#e880e5]/30"
+              className="inline-block px-16 py-7 bg-[#e880e5] text-white rounded-full font-bold tracking-wider uppercase text-lg shadow-2xl shadow-[#e880e5]/30"
               whileHover={{
                 scale: 1.08,
                 boxShadow: "0 25px 60px rgba(232,128,229,0.5)",
