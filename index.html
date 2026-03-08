@@ -132,58 +132,103 @@ section {
   0% { transform: translateY(100%); }
   100% { transform: translateY(-100%); }
 }
-.hero h1 {
-  font-size: clamp(3rem, 8vw, 7rem);
-  line-height: 1.15;
-  font-weight: 700;
-  position: relative;
+/* Hero word stages */
+.hero-stage {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   z-index: 1;
-}
-.hero-word {
-  display: inline;
   opacity: 0;
-  filter: blur(12px);
-  transform: translateY(30px);
-  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
-              filter 0.7s cubic-bezier(0.16, 1, 0.3, 1),
-              transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  transform: scale(0.85) translateY(20px);
+  filter: blur(10px);
+  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+              filter 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
 }
-.hero-word.visible {
+.hero-stage.active {
   opacity: 1;
+  transform: scale(1) translateY(0);
   filter: blur(0);
-  transform: translateY(0);
+  pointer-events: auto;
 }
-.hero-word.accent { color: var(--pink); }
-.hero p {
-  font-size: clamp(1rem, 2vw, 1.3rem);
-  max-width: 600px;
-  line-height: 1.7;
+.hero-stage.exiting {
+  opacity: 0;
+  transform: scale(1.1) translateY(-20px);
+  filter: blur(6px);
+}
+.hero-stage h1 {
+  font-size: clamp(4rem, 12vw, 10rem);
+  font-weight: 700;
+  line-height: 1;
+  position: relative;
+  z-index: 1;
+  color: var(--white);
+}
+.hero-stage:nth-child(2) h1 { color: var(--pink); }
+.hero-stage:nth-child(3) h1 { color: var(--lavender); }
+.hero-stage:nth-child(4) h1 { color: var(--white); }
+
+/* Wavy underline SVG */
+.hero-wave {
+  width: 100%;
+  max-width: 500px;
+  height: 30px;
+  margin-top: 0.5rem;
+  overflow: visible;
+}
+.hero-wave path {
+  fill: none;
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-dasharray: 600;
+  stroke-dashoffset: 600;
+  transition: stroke-dashoffset 1s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.hero-stage:nth-child(2) .hero-wave path { stroke: var(--pink); }
+.hero-stage:nth-child(3) .hero-wave path { stroke: var(--lavender); }
+.hero-stage:nth-child(4) .hero-wave path { stroke: var(--white); }
+.hero-stage.active .hero-wave path {
+  stroke-dashoffset: 0;
+}
+
+/* Connector wave — persistent line that grows across stages */
+.hero-connector {
+  position: absolute;
+  bottom: 28%;
+  left: 5%;
+  width: 90%;
+  height: 40px;
+  z-index: 1;
+  overflow: visible;
+  pointer-events: none;
+}
+.hero-connector path {
+  fill: none;
+  stroke: var(--pink);
+  stroke-width: 2;
+  stroke-linecap: round;
+  opacity: 0.25;
+  stroke-dasharray: 1200;
+  stroke-dashoffset: 1200;
+  transition: stroke-dashoffset 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Subtext */
+.hero-subtext {
+  position: absolute;
+  bottom: 18%;
+  z-index: 1;
+  font-size: clamp(0.9rem, 2vw, 1.2rem);
   text-transform: uppercase;
-  letter-spacing: 0.2em;
-  position: relative;
-  z-index: 1;
+  letter-spacing: 0.25em;
+  color: rgba(255,255,255,0.7);
   opacity: 0;
-  filter: blur(12px);
-  transform: translateY(20px);
-  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
-              filter 0.7s cubic-bezier(0.16, 1, 0.3, 1),
-              transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  transform: translateY(15px);
+  transition: opacity 0.6s 0.2s ease, transform 0.6s 0.2s ease;
 }
-.hero p.visible {
-  opacity: 0.85;
-  filter: blur(0);
-  transform: translateY(0);
-}
-.hero-cta {
-  display: flex; gap: 1rem;
-  flex-wrap: wrap; justify-content: center;
-  position: relative;
-  z-index: 1;
-  opacity: 0;
-  transform: translateY(20px);
-  transition: opacity 0.7s 0.2s ease, transform 0.7s 0.2s ease;
-}
-.hero-cta.visible {
+.hero-subtext.visible {
   opacity: 1;
   transform: translateY(0);
 }
@@ -784,7 +829,7 @@ footer {
 @media (max-width: 600px) {
   .footer-inner { grid-template-columns: 1fr; }
   .stat-row { flex-direction: column; gap: 1.5rem; }
-  .hero h1 { font-size: 2.8rem; }
+  .hero-stage h1 { font-size: 3.5rem; }
   .nav-links { display: none; }
 }
 </style>
@@ -808,12 +853,38 @@ footer {
 <div class="hero-scroll-container" id="heroContainer">
   <section class="hero">
     <div class="hero-code-bg" id="codeBg"></div>
-    <h1>
-      <span class="hero-word accent" data-step="0">Kai</span>
-      <span class="hero-word" data-step="1"> Digital</span><br>
-      <span class="hero-word" data-step="2">Studio</span>
-    </h1>
-    <p data-step="3">Customized Websites</p>
+
+    <!-- Stage 1: KAI -->
+    <div class="hero-stage" data-stage="0">
+      <h1>KAI</h1>
+      <svg class="hero-wave" viewBox="0 0 300 30">
+        <path d="M0,15 Q25,0 50,15 Q75,30 100,15 Q125,0 150,15 Q175,30 200,15 Q225,0 250,15 Q275,30 300,15"/>
+      </svg>
+    </div>
+
+    <!-- Stage 2: DIGITAL -->
+    <div class="hero-stage" data-stage="1">
+      <h1>DIGITAL</h1>
+      <svg class="hero-wave" viewBox="0 0 300 30">
+        <path d="M0,15 Q20,0 40,15 Q60,30 80,15 Q100,0 120,15 Q140,30 160,15 Q180,0 200,15 Q220,30 240,15 Q260,0 280,15 Q300,30 300,15"/>
+      </svg>
+    </div>
+
+    <!-- Stage 3: STUDIO -->
+    <div class="hero-stage" data-stage="2">
+      <h1>STUDIO</h1>
+      <svg class="hero-wave" viewBox="0 0 300 30">
+        <path d="M0,15 Q30,0 60,15 Q90,30 120,15 Q150,0 180,15 Q210,30 240,15 Q270,0 300,15"/>
+      </svg>
+    </div>
+
+    <!-- Connector wave that grows across all stages -->
+    <svg class="hero-connector" id="heroConnector" viewBox="0 0 800 40">
+      <path d="M0,20 Q30,5 60,20 Q90,35 120,20 Q150,5 180,20 Q210,35 240,20 Q270,5 300,20 Q330,35 360,20 Q390,5 420,20 Q450,35 480,20 Q510,5 540,20 Q570,35 600,20 Q630,5 660,20 Q690,35 720,20 Q750,5 780,20 Q800,35 800,20"/>
+    </svg>
+
+    <div class="hero-subtext" id="heroSubtext">Customized Websites</div>
+
     <div class="scroll-indicator" id="heroScrollHint">
       <div class="mouse"><div class="wheel"></div></div>
     </div>
@@ -1106,17 +1177,17 @@ footer {
 </footer>
 
 <script>
-// ── Hero scroll-based word reveal ──
+// ── Hero scroll-based stage reveal ──
 const heroContainer = document.getElementById('heroContainer');
-const heroWords = document.querySelectorAll('.hero-word');
-const heroSub = document.querySelector('.hero p[data-step]');
-const heroCta = document.getElementById('heroCta');
+const heroStages = document.querySelectorAll('.hero-stage');
+const heroConnector = document.querySelector('#heroConnector path');
+const heroSubtext = document.getElementById('heroSubtext');
 const heroScrollHint = document.getElementById('heroScrollHint');
-
-
 const heroSection = document.querySelector('.hero');
 
-function updateHeroWords() {
+let prevStageIndex = -1;
+
+function updateHeroStages() {
   const containerTop = heroContainer.offsetTop;
   const scrollable = heroContainer.offsetHeight - window.innerHeight;
   const scrolled = window.scrollY - containerTop;
@@ -1129,21 +1200,32 @@ function updateHeroWords() {
     heroSection.classList.remove('hero-done');
   }
 
-  // 4 steps: 0=Kai, 1=Digital, 2=Studio, 3=subtext
-  const step = progress * 4;
+  // 4 zones: 0-25% = KAI, 25-50% = DIGITAL, 50-75% = STUDIO, 75-100% = subtext
+  const zone = progress * 4;
+  const stageIndex = Math.min(2, Math.floor(zone));
+  const showStage = zone >= 0.15; // don't show anything until slight scroll
 
-  heroWords.forEach(w => {
-    const s = parseInt(w.dataset.step);
-    w.classList.toggle('visible', step >= s + 0.3);
+  heroStages.forEach((stage, i) => {
+    const isActive = showStage && i === stageIndex && zone < 3.2;
+    const isExiting = showStage && i < stageIndex;
+    stage.classList.toggle('active', isActive);
+    stage.classList.toggle('exiting', isExiting);
   });
 
-  if (heroSub) heroSub.classList.toggle('visible', step >= 3.1);
-  if (heroCta) heroCta.classList.toggle('visible', step >= 3.4);
-  if (heroScrollHint) heroScrollHint.classList.toggle('hidden', progress > 0.05);
+  // Connector wave grows with progress — reveals more of the path as you scroll
+  const connectorProgress = Math.max(0, Math.min(1, (zone - 0.15) / 2.85));
+  const totalLength = 1200;
+  heroConnector.style.strokeDashoffset = totalLength * (1 - connectorProgress);
+
+  // Subtext appears in the final zone
+  heroSubtext.classList.toggle('visible', zone >= 3.2);
+
+  // Hide scroll hint on scroll
+  if (heroScrollHint) heroScrollHint.classList.toggle('hidden', progress > 0.03);
 }
 
-window.addEventListener('scroll', updateHeroWords, { passive: true });
-updateHeroWords();
+window.addEventListener('scroll', updateHeroStages, { passive: true });
+updateHeroStages();
 
 // ── Code background ──
 const codeBg = document.getElementById('codeBg');
