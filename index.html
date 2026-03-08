@@ -1113,11 +1113,6 @@ const heroSub = document.querySelector('.hero p[data-step]');
 const heroCta = document.getElementById('heroCta');
 const heroScrollHint = document.getElementById('heroScrollHint');
 
-// Show "Kai" immediately on load
-setTimeout(() => {
-  const first = document.querySelector('[data-step="0"]');
-  if (first && window.scrollY < 50) first.classList.add('visible');
-}, 400);
 
 const heroSection = document.querySelector('.hero');
 
@@ -1139,7 +1134,7 @@ function updateHeroWords() {
 
   heroWords.forEach(w => {
     const s = parseInt(w.dataset.step);
-    w.classList.toggle('visible', step >= s + 0.1);
+    w.classList.toggle('visible', step >= s + 0.3);
   });
 
   if (heroSub) heroSub.classList.toggle('visible', step >= 3.1);
