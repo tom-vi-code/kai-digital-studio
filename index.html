@@ -85,8 +85,10 @@ section {
   height: 500vh;
 }
 .hero {
-  position: sticky;
+  position: fixed;
   top: 0;
+  left: 0;
+  width: 100%;
   height: 100vh;
   background: linear-gradient(160deg, var(--navy) 0%, #3a2aae 50%, var(--blue) 100%);
   color: var(--white);
@@ -98,6 +100,12 @@ section {
   align-items: center;
   justify-content: center;
   overflow: hidden;
+  z-index: 1;
+}
+.hero.hero-done {
+  position: absolute;
+  bottom: 0;
+  top: auto;
 }
 .hero-code-bg {
   position: absolute;
@@ -1115,13 +1123,22 @@ setTimeout(() => {
   if (first && window.scrollY < 50) first.classList.add('visible');
 }, 400);
 
+const heroSection = document.querySelector('.hero');
+
 function updateHeroWords() {
-  const rect = heroContainer.getBoundingClientRect();
+  const containerTop = heroContainer.offsetTop;
   const scrollable = heroContainer.offsetHeight - window.innerHeight;
-  const progress = Math.max(0, Math.min(1, -rect.top / scrollable));
+  const scrolled = window.scrollY - containerTop;
+  const progress = Math.max(0, Math.min(1, scrolled / scrollable));
+
+  // Pin hero as fixed while inside container, then snap to absolute at bottom
+  if (scrolled >= scrollable) {
+    heroSection.classList.add('hero-done');
+  } else {
+    heroSection.classList.remove('hero-done');
+  }
 
   // 4 steps: 0=Kai, 1=Digital, 2=Studio, 3=subtext
-  // Each step triggers at 0%, 25%, 50%, 75%
   const step = progress * 4;
 
   heroWords.forEach(w => {
@@ -1129,13 +1146,8 @@ function updateHeroWords() {
     w.classList.toggle('visible', step >= s + 0.1);
   });
 
-  // Subtext at step 3
   if (heroSub) heroSub.classList.toggle('visible', step >= 3.1);
-
-  // CTA appears with subtext
   if (heroCta) heroCta.classList.toggle('visible', step >= 3.4);
-
-  // Hide scroll hint after first scroll
   if (heroScrollHint) heroScrollHint.classList.toggle('hidden', progress > 0.05);
 }
 
