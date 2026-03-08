@@ -16,7 +16,7 @@
   --navy: #27187e;
 }
 
-html { scroll-behavior: smooth; overflow-x: hidden; }
+html { overflow-x: hidden; }
 
 body {
   font-family: 'Arimo', sans-serif;
@@ -79,83 +79,123 @@ section {
   overflow: hidden;
 }
 
-/* ── HERO ── */
-.hero {
-  background: linear-gradient(160deg, var(--navy) 0%, #3a2aae 50%, var(--blue) 100%);
+/* ── HERO HORIZONTAL SCROLL ── */
+.hero-wrapper {
+  position: relative;
+  height: 400vh; /* scroll runway */
+}
+.hero-sticky {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow: hidden;
+}
+.hero-track {
+  display: flex;
+  height: 100%;
+  width: 400vw; /* 4 panels */
+  will-change: transform;
+}
+.hero-panel {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+}
+.hero-panel:nth-child(1) {
+  background: linear-gradient(160deg, var(--navy) 0%, #3a2aae 100%);
+}
+.hero-panel:nth-child(2) {
+  background: linear-gradient(160deg, #3a2aae 0%, var(--blue) 100%);
+}
+.hero-panel:nth-child(3) {
+  background: linear-gradient(160deg, var(--blue) 0%, var(--pink) 100%);
+}
+.hero-panel:nth-child(4) {
+  background: linear-gradient(160deg, var(--pink) 0%, var(--navy) 100%);
+}
+.hero-word {
+  font-family: 'Oswald', sans-serif;
+  font-size: clamp(5rem, 15vw, 14rem);
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--white);
+  letter-spacing: 0.05em;
+  opacity: 0;
+  transform: scale(0.6) translateY(40px);
+  transition: opacity 0.6s ease, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  line-height: 1;
+}
+.hero-word.visible {
+  opacity: 1;
+  transform: scale(1) translateY(0);
+}
+.hero-word .pink { color: var(--pink); }
+.hero-word .lavender { color: var(--lavender); }
+.hero-word .navy-accent { color: var(--navy); }
+.hero-panel-sub {
+  font-family: 'Arimo', sans-serif;
+  font-size: clamp(0.9rem, 2vw, 1.3rem);
+  text-transform: uppercase;
+  letter-spacing: 0.25em;
+  color: rgba(255,255,255,0.6);
+  margin-top: 1.2rem;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s 0.3s ease, transform 0.5s 0.3s ease;
+}
+.hero-word.visible ~ .hero-panel-sub {
+  opacity: 1;
+  transform: translateY(0);
+}
+/* Decorative line across panels */
+.hero-line {
+  position: absolute;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--pink), transparent);
+  width: 60%;
+  bottom: 30%;
+  left: 20%;
+  opacity: 0.15;
+}
+/* Final panel with CTA */
+.hero-final-title {
+  font-family: 'Oswald', sans-serif;
+  font-size: clamp(2.5rem, 6vw, 5rem);
+  font-weight: 700;
+  text-transform: uppercase;
   color: var(--white);
   text-align: center;
-  flex-direction: column;
-  gap: 1.5rem;
-  padding: 2rem;
-}
-.hero-code-bg {
-  position: absolute;
-  inset: 0;
-  overflow: hidden;
-  pointer-events: none;
-}
-.code-column {
-  position: absolute;
-  top: 0;
-  display: flex;
-  flex-direction: column;
-  animation: scrollCode linear infinite;
-}
-.code-column span {
-  font-family: 'Courier New', monospace;
-  font-size: 0.75rem;
-  color: var(--pink);
-  white-space: nowrap;
-  line-height: 1.6;
-  opacity: 0.18;
-}
-@keyframes scrollCode {
-  0% { transform: translateY(100%); }
-  100% { transform: translateY(-100%); }
-}
-.hero-badge {
-  display: inline-block;
-  padding: 0.5rem 1.6rem;
-  border: 1px solid rgba(201,206,244,0.4);
-  border-radius: 50px;
-  font-size: 0.85rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
+  line-height: 1.1;
   opacity: 0;
-  animation: fadeUp 1s 0.3s forwards;
+  transform: translateY(40px);
+  transition: opacity 0.6s ease, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
 }
-.hero h1 {
-  font-size: clamp(3rem, 8vw, 7rem);
-  line-height: 1.05;
-  font-weight: 700;
-}
-.hero h1 .accent { color: var(--pink); }
-.hero h1 .char {
-  display: inline-block;
-  opacity: 0;
-  transform: translateY(60px) rotateX(-90deg);
-  animation: charReveal 0.6s forwards;
-}
-@keyframes charReveal {
-  0% { opacity: 0; transform: translateY(60px) rotateX(-90deg) scale(0.8); filter: blur(8px); }
-  60% { opacity: 1; transform: translateY(-8px) rotateX(5deg) scale(1.02); filter: blur(0); }
-  100% { opacity: 1; transform: translateY(0) rotateX(0) scale(1); filter: blur(0); }
-}
-.hero p {
-  font-size: clamp(1rem, 2vw, 1.3rem);
-  max-width: 600px;
-  line-height: 1.7;
+.hero-final-title.visible { opacity: 1; transform: translateY(0); }
+.hero-final-title .accent { color: var(--pink); }
+.hero-final-sub {
+  font-family: 'Arimo', sans-serif;
+  font-size: clamp(1rem, 2vw, 1.2rem);
+  color: rgba(255,255,255,0.7);
   text-transform: uppercase;
   letter-spacing: 0.2em;
+  margin-top: 1rem;
+  margin-bottom: 2rem;
   opacity: 0;
-  animation: fadeUp 1s 1.8s forwards;
+  transition: opacity 0.5s 0.2s ease;
 }
+.hero-final-title.visible ~ .hero-final-sub { opacity: 1; }
 .hero-cta {
   display: flex; gap: 1rem;
   flex-wrap: wrap; justify-content: center;
   opacity: 0;
-  animation: fadeUp 1s 0.9s forwards;
+  transition: opacity 0.5s 0.4s ease;
 }
+.hero-final-title.visible ~ .hero-cta { opacity: 1; }
 .btn {
   display: inline-block;
   padding: 1rem 2.5rem;
@@ -174,29 +214,59 @@ section {
 .btn-primary:hover { background: #d060d0; transform: translateY(-3px); box-shadow: 0 10px 30px rgba(232,128,229,0.4); }
 .btn-outline { background: transparent; color: var(--white); border: 2px solid rgba(255,255,255,0.4); }
 .btn-outline:hover { border-color: var(--white); transform: translateY(-3px); }
-.scroll-indicator {
+/* Scroll hint on first panel */
+.scroll-hint {
   position: absolute;
-  bottom: 2rem;
+  bottom: 2.5rem;
   left: 50%;
   transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+  color: rgba(255,255,255,0.4);
+  font-family: 'Arimo', sans-serif;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+}
+.scroll-hint-arrow {
+  width: 20px;
+  height: 20px;
+  border-right: 2px solid rgba(255,255,255,0.4);
+  border-bottom: 2px solid rgba(255,255,255,0.4);
+  transform: rotate(45deg);
+  animation: bounceArrow 1.5s infinite;
+}
+@keyframes bounceArrow {
+  0%, 100% { transform: rotate(45deg) translateY(0); }
+  50% { transform: rotate(45deg) translateY(6px); }
+}
+/* Progress dots */
+.hero-progress {
+  position: fixed;
+  right: 2rem;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  z-index: 999;
   opacity: 0;
-  animation: fadeUp 1s 1.2s forwards;
+  transition: opacity 0.3s;
 }
-.scroll-indicator .mouse {
-  width: 26px; height: 42px;
-  border: 2px solid rgba(255,255,255,0.5);
-  border-radius: 14px;
-  display: flex; justify-content: center; padding-top: 8px;
+.hero-progress.visible { opacity: 1; }
+.hero-progress-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.25);
+  transition: all 0.3s ease;
 }
-.scroll-indicator .wheel {
-  width: 4px; height: 8px;
-  background: var(--white);
-  border-radius: 2px;
-  animation: scrollWheel 1.8s infinite;
-}
-@keyframes scrollWheel {
-  0% { transform: translateY(0); opacity: 1; }
-  100% { transform: translateY(12px); opacity: 0; }
+.hero-progress-dot.active {
+  background: var(--pink);
+  box-shadow: 0 0 10px rgba(232,128,229,0.5);
+  transform: scale(1.3);
 }
 
 @keyframes fadeUp {
@@ -751,7 +821,9 @@ footer {
 @media (max-width: 600px) {
   .footer-inner { grid-template-columns: 1fr; }
   .stat-row { flex-direction: column; gap: 1.5rem; }
-  .hero h1 { font-size: 2.8rem; }
+  .hero-word { font-size: 4rem; }
+  .hero-final-title { font-size: 2.2rem; }
+  .hero-progress { display: none; }
   .nav-links { display: none; }
 }
 </style>
@@ -772,18 +844,45 @@ footer {
 </nav>
 
 <!-- HERO -->
-<section class="hero">
-  <div class="hero-code-bg" id="codeBg"></div>
-  <h1><span class="accent">Kai</span> Digital<br>Studio</h1>
-  <p>Customized Websites</p>
-  <div class="hero-cta">
-    <a href="#work" class="btn btn-primary">See Our Work</a>
-    <a href="#contact" class="btn btn-outline">Get In Touch</a>
+<div class="hero-wrapper" id="heroWrapper">
+  <div class="hero-sticky">
+    <div class="hero-track" id="heroTrack">
+      <div class="hero-panel">
+        <div class="hero-word" data-panel="0"><span class="pink">Kai</span></div>
+        <div class="hero-panel-sub">Creative Vision</div>
+        <div class="hero-line"></div>
+        <div class="scroll-hint">
+          <span>Scroll</span>
+          <div class="scroll-hint-arrow"></div>
+        </div>
+      </div>
+      <div class="hero-panel">
+        <div class="hero-word" data-panel="1"><span class="lavender">Digital</span></div>
+        <div class="hero-panel-sub">Modern Technology</div>
+        <div class="hero-line"></div>
+      </div>
+      <div class="hero-panel">
+        <div class="hero-word" data-panel="2">Studio</div>
+        <div class="hero-panel-sub">Expert Craft</div>
+        <div class="hero-line"></div>
+      </div>
+      <div class="hero-panel">
+        <div class="hero-final-title" data-panel="3">Kai <span class="accent">Digital</span><br>Studio</div>
+        <div class="hero-final-sub">Customized Websites</div>
+        <div class="hero-cta">
+          <a href="#work" class="btn btn-primary">See Our Work</a>
+          <a href="#contact" class="btn btn-outline">Get In Touch</a>
+        </div>
+      </div>
+    </div>
   </div>
-  <div class="scroll-indicator">
-    <div class="mouse"><div class="wheel"></div></div>
-  </div>
-</section>
+</div>
+<div class="hero-progress" id="heroProgress">
+  <div class="hero-progress-dot active"></div>
+  <div class="hero-progress-dot"></div>
+  <div class="hero-progress-dot"></div>
+  <div class="hero-progress-dot"></div>
+</div>
 
 <!-- MARQUEE -->
 <div class="marquee-section">
@@ -1071,79 +1170,52 @@ footer {
 </footer>
 
 <script>
-// ── Hero text animation ──
-document.querySelectorAll('.hero h1').forEach(h1 => {
-  const html = h1.innerHTML;
-  let charIndex = 0;
-  const wrapped = html.replace(/(<[^>]+>)|([^<])/g, (match, tag, char) => {
-    if (tag) return tag;
-    if (char === ' ') return ' ';
-    const delay = 0.4 + charIndex * 0.045;
-    charIndex++;
-    return `<span class="char" style="animation-delay:${delay}s">${char}</span>`;
-  });
-  h1.innerHTML = wrapped;
-});
+// ── Hero horizontal scroll ──
+const heroWrapper = document.getElementById('heroWrapper');
+const heroTrack = document.getElementById('heroTrack');
+const heroProgress = document.getElementById('heroProgress');
+const progressDots = heroProgress.querySelectorAll('.hero-progress-dot');
+const heroWords = document.querySelectorAll('.hero-word, .hero-final-title');
 
-// ── Code background ──
-const codeBg = document.getElementById('codeBg');
-const codeSnippets = [
-  'const app = express();',
-  'import React from "react";',
-  'function render() {',
-  '  return <Component />;',
-  'const [state, setState] = useState();',
-  'export default App;',
-  'npm install --save',
-  'git commit -m "deploy"',
-  'const db = await connect();',
-  'app.listen(3000);',
-  'async function fetchData() {',
-  '  const res = await fetch(url);',
-  '  return res.json();',
-  '}',
-  'border-radius: 20px;',
-  'display: flex;',
-  'justify-content: center;',
-  'const router = useRouter();',
-  'module.exports = config;',
-  '<div className={styles.hero}>',
-  'transform: translateY(0);',
-  'opacity: 1;',
-  'transition: all 0.4s ease;',
-  'background: linear-gradient(...);',
-  'const handleClick = (e) => {',
-  '  e.preventDefault();',
-  '  navigate("/home");',
-  '};',
-  'SELECT * FROM projects;',
-  'CREATE TABLE clients (',
-  '  id SERIAL PRIMARY KEY,',
-  '  name VARCHAR(255)',
-  ');',
-  'docker build -t app .',
-  'FROM node:18-alpine',
-  'COPY . /usr/src/app',
-  'RUN npm ci --production',
-];
-const numColumns = 14;
-for (let i = 0; i < numColumns; i++) {
-  const col = document.createElement('div');
-  col.classList.add('code-column');
-  col.style.left = (i * (100 / numColumns)) + '%';
-  const duration = 12 + Math.random() * 16;
-  const delay = -(Math.random() * duration);
-  col.style.animationDuration = duration + 's';
-  col.style.animationDelay = delay + 's';
-  // Fill with random code lines
-  const lineCount = 30 + Math.floor(Math.random() * 15);
-  for (let j = 0; j < lineCount; j++) {
-    const span = document.createElement('span');
-    span.textContent = codeSnippets[Math.floor(Math.random() * codeSnippets.length)];
-    col.appendChild(span);
-  }
-  codeBg.appendChild(col);
+function updateHero() {
+  const rect = heroWrapper.getBoundingClientRect();
+  const wrapperHeight = heroWrapper.offsetHeight;
+  const scrollDistance = wrapperHeight - window.innerHeight;
+  const progress = Math.max(0, Math.min(1, -rect.top / scrollDistance));
+
+  // Move track horizontally
+  const maxTranslate = heroTrack.scrollWidth - window.innerWidth;
+  heroTrack.style.transform = `translateX(${-progress * maxTranslate}px)`;
+
+  // Show/hide progress dots
+  const inHero = rect.top <= 0 && rect.bottom > window.innerHeight;
+  heroProgress.classList.toggle('visible', inHero);
+
+  // Determine active panel and animate words
+  const panelIndex = Math.min(3, Math.floor(progress * 4));
+  progressDots.forEach((dot, i) => {
+    dot.classList.toggle('active', i === panelIndex);
+  });
+
+  // Show words based on which panel is centered
+  heroWords.forEach(word => {
+    const panel = parseInt(word.dataset.panel);
+    const panelStart = panel / 4;
+    const panelEnd = (panel + 1) / 4;
+    const panelCenter = (panelStart + panelEnd) / 2;
+    const dist = Math.abs(progress - panelCenter);
+    word.classList.toggle('visible', dist < 0.18);
+  });
 }
+
+window.addEventListener('scroll', updateHero, { passive: true });
+updateHero();
+
+// Show first word immediately
+setTimeout(() => {
+  const firstWord = document.querySelector('[data-panel="0"]');
+  if (firstWord && window.scrollY < 100) firstWord.classList.add('visible');
+}, 300);
 
 // ── Nav scroll ──
 const navbar = document.getElementById('navbar');
