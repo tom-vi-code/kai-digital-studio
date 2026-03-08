@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Kai Digital Studio</title>
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&family=Arimo:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/ScrollTrigger.min.js"></script>
 <style>
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -80,38 +82,31 @@ section {
 }
 
 /* ── HERO ── */
-.hero-scroll-container {
+.hero-horizontal {
   position: relative;
-  height: 500vh;
+  overflow: hidden;
 }
-.hero {
-  position: fixed;
-  top: 0;
-  left: 0;
+.hero-pin {
   width: 100%;
   height: 100vh;
-  background: linear-gradient(160deg, var(--navy) 0%, #3a2aae 50%, var(--blue) 100%);
-  color: var(--white);
-  text-align: center;
-  flex-direction: column;
-  gap: 0.5rem;
-  padding: 2rem;
+  overflow: hidden;
+  background: linear-gradient(160deg, var(--navy) 0%, #3a2aae 40%, var(--blue) 100%);
+  position: relative;
+}
+.hero-track {
   display: flex;
   align-items: center;
-  justify-content: center;
-  overflow: hidden;
-  z-index: 1;
+  height: 100%;
+  width: fit-content;
+  position: relative;
 }
-.hero.hero-done {
-  position: absolute;
-  bottom: 0;
-  top: auto;
-}
+/* Code rain background */
 .hero-code-bg {
   position: absolute;
   inset: 0;
   overflow: hidden;
   pointer-events: none;
+  z-index: 0;
 }
 .code-column {
   position: absolute;
@@ -126,111 +121,108 @@ section {
   color: var(--pink);
   white-space: nowrap;
   line-height: 1.6;
-  opacity: 0.18;
+  opacity: 0.12;
 }
 @keyframes scrollCode {
   0% { transform: translateY(100%); }
   100% { transform: translateY(-100%); }
 }
-/* Hero word stages */
-.hero-stage {
+
+/* Word panels inside the track */
+.hero-word-panel {
+  flex: 0 0 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+.hero-word {
+  font-family: 'Oswald', sans-serif;
+  font-size: clamp(5rem, 14vw, 13rem);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  position: relative;
+  z-index: 2;
+}
+.hero-word .char {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(40px);
+}
+.hero-word-panel:nth-child(1) .hero-word { color: var(--pink); }
+.hero-word-panel:nth-child(2) .hero-word { color: var(--lavender); }
+.hero-word-panel:nth-child(3) .hero-word { color: var(--white); }
+
+/* Subtext panel */
+.hero-word-panel.subtext-panel {
+  flex: 0 0 60vw;
+}
+.hero-subtext {
+  font-family: 'Arimo', sans-serif;
+  font-size: clamp(1rem, 2.5vw, 1.5rem);
+  text-transform: uppercase;
+  letter-spacing: 0.3em;
+  color: rgba(255,255,255,0.8);
+  white-space: nowrap;
+  position: relative;
+  z-index: 2;
+}
+.hero-subtext .char {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+/* Wavy foreground SVG */
+.hero-wave-fg {
   position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 200px;
+  z-index: 1;
+  pointer-events: none;
+}
+.hero-wave-fg path {
+  fill: none;
+  stroke-linecap: round;
+}
+
+/* Scroll hint */
+.hero-scroll-hint {
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
   display: flex;
   flex-direction: column;
   align-items: center;
-  z-index: 1;
-  opacity: 0;
-  transform: scale(0.85) translateY(20px);
-  filter: blur(10px);
-  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
-              transform 0.6s cubic-bezier(0.16, 1, 0.3, 1),
-              filter 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-  pointer-events: none;
-}
-.hero-stage.active {
-  opacity: 1;
-  transform: scale(1) translateY(0);
-  filter: blur(0);
-  pointer-events: auto;
-}
-.hero-stage.exiting {
-  opacity: 0;
-  transform: scale(1.1) translateY(-20px);
-  filter: blur(6px);
-}
-.hero-stage h1 {
-  font-size: clamp(4rem, 12vw, 10rem);
-  font-weight: 700;
-  line-height: 1;
-  position: relative;
-  z-index: 1;
-  color: var(--white);
-}
-.hero-stage:nth-child(2) h1 { color: var(--pink); }
-.hero-stage:nth-child(3) h1 { color: var(--lavender); }
-.hero-stage:nth-child(4) h1 { color: var(--white); }
-
-/* Wavy underline SVG */
-.hero-wave {
-  width: 100%;
-  max-width: 500px;
-  height: 30px;
-  margin-top: 0.5rem;
-  overflow: visible;
-}
-.hero-wave path {
-  fill: none;
-  stroke-width: 3;
-  stroke-linecap: round;
-  stroke-dasharray: 600;
-  stroke-dashoffset: 600;
-  transition: stroke-dashoffset 1s cubic-bezier(0.16, 1, 0.3, 1);
-}
-.hero-stage:nth-child(2) .hero-wave path { stroke: var(--pink); }
-.hero-stage:nth-child(3) .hero-wave path { stroke: var(--lavender); }
-.hero-stage:nth-child(4) .hero-wave path { stroke: var(--white); }
-.hero-stage.active .hero-wave path {
-  stroke-dashoffset: 0;
-}
-
-/* Connector wave — persistent line that grows across stages */
-.hero-connector {
-  position: absolute;
-  bottom: 28%;
-  left: 5%;
-  width: 90%;
-  height: 40px;
-  z-index: 1;
-  overflow: visible;
-  pointer-events: none;
-}
-.hero-connector path {
-  fill: none;
-  stroke: var(--pink);
-  stroke-width: 2;
-  stroke-linecap: round;
-  opacity: 0.25;
-  stroke-dasharray: 1200;
-  stroke-dashoffset: 1200;
-  transition: stroke-dashoffset 1.2s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-/* Subtext */
-.hero-subtext {
-  position: absolute;
-  bottom: 18%;
-  z-index: 1;
-  font-size: clamp(0.9rem, 2vw, 1.2rem);
+  gap: 0.5rem;
+  color: rgba(255,255,255,0.4);
+  font-family: 'Arimo', sans-serif;
+  font-size: 0.7rem;
   text-transform: uppercase;
-  letter-spacing: 0.25em;
-  color: rgba(255,255,255,0.7);
-  opacity: 0;
-  transform: translateY(15px);
-  transition: opacity 0.6s 0.2s ease, transform 0.6s 0.2s ease;
+  letter-spacing: 0.15em;
 }
-.hero-subtext.visible {
-  opacity: 1;
-  transform: translateY(0);
+.hero-scroll-hint .mouse {
+  width: 24px; height: 38px;
+  border: 2px solid rgba(255,255,255,0.35);
+  border-radius: 12px;
+  display: flex; justify-content: center; padding-top: 7px;
+}
+.hero-scroll-hint .wheel {
+  width: 3px; height: 7px;
+  background: rgba(255,255,255,0.5);
+  border-radius: 2px;
+  animation: scrollWheel 1.8s infinite;
+}
+@keyframes scrollWheel {
+  0% { transform: translateY(0); opacity: 1; }
+  100% { transform: translateY(10px); opacity: 0; }
 }
 .btn {
   display: inline-block;
@@ -829,7 +821,7 @@ footer {
 @media (max-width: 600px) {
   .footer-inner { grid-template-columns: 1fr; }
   .stat-row { flex-direction: column; gap: 1.5rem; }
-  .hero-stage h1 { font-size: 3.5rem; }
+  .hero-word { font-size: 4rem !important; }
   .nav-links { display: none; }
 }
 </style>
@@ -850,45 +842,41 @@ footer {
 </nav>
 
 <!-- HERO -->
-<div class="hero-scroll-container" id="heroContainer">
-  <section class="hero">
+<div class="hero-horizontal" id="heroHorizontal">
+  <div class="hero-pin" id="heroPin">
     <div class="hero-code-bg" id="codeBg"></div>
-
-    <!-- Stage 1: KAI -->
-    <div class="hero-stage" data-stage="0">
-      <h1>KAI</h1>
-      <svg class="hero-wave" viewBox="0 0 300 30">
-        <path d="M0,15 Q25,0 50,15 Q75,30 100,15 Q125,0 150,15 Q175,30 200,15 Q225,0 250,15 Q275,30 300,15"/>
-      </svg>
+    <div class="hero-track" id="heroTrack">
+      <!-- Spacer so it starts blank -->
+      <div class="hero-word-panel"></div>
+      <!-- KAI -->
+      <div class="hero-word-panel">
+        <div class="hero-word" data-word="kai">KAI</div>
+      </div>
+      <!-- DIGITAL -->
+      <div class="hero-word-panel">
+        <div class="hero-word" data-word="digital">DIGITAL</div>
+      </div>
+      <!-- STUDIO -->
+      <div class="hero-word-panel">
+        <div class="hero-word" data-word="studio">STUDIO</div>
+      </div>
+      <!-- CUSTOMIZED WEBSITES -->
+      <div class="hero-word-panel subtext-panel">
+        <div class="hero-subtext" data-word="subtext">CUSTOMIZED WEBSITES</div>
+      </div>
     </div>
-
-    <!-- Stage 2: DIGITAL -->
-    <div class="hero-stage" data-stage="1">
-      <h1>DIGITAL</h1>
-      <svg class="hero-wave" viewBox="0 0 300 30">
-        <path d="M0,15 Q20,0 40,15 Q60,30 80,15 Q100,0 120,15 Q140,30 160,15 Q180,0 200,15 Q220,30 240,15 Q260,0 280,15 Q300,30 300,15"/>
-      </svg>
-    </div>
-
-    <!-- Stage 3: STUDIO -->
-    <div class="hero-stage" data-stage="2">
-      <h1>STUDIO</h1>
-      <svg class="hero-wave" viewBox="0 0 300 30">
-        <path d="M0,15 Q30,0 60,15 Q90,30 120,15 Q150,0 180,15 Q210,30 240,15 Q270,0 300,15"/>
-      </svg>
-    </div>
-
-    <!-- Connector wave that grows across all stages -->
-    <svg class="hero-connector" id="heroConnector" viewBox="0 0 800 40">
-      <path d="M0,20 Q30,5 60,20 Q90,35 120,20 Q150,5 180,20 Q210,35 240,20 Q270,5 300,20 Q330,35 360,20 Q390,5 420,20 Q450,35 480,20 Q510,5 540,20 Q570,35 600,20 Q630,5 660,20 Q690,35 720,20 Q750,5 780,20 Q800,35 800,20"/>
+    <!-- Foreground wavy lines -->
+    <svg class="hero-wave-fg" id="heroWaveFg" viewBox="0 0 1000 200" preserveAspectRatio="none">
+      <path d="" stroke="rgba(232,128,229,0.35)" stroke-width="2"/>
+      <path d="" stroke="rgba(201,206,244,0.25)" stroke-width="1.5"/>
+      <path d="" stroke="rgba(117,139,238,0.2)" stroke-width="2.5"/>
     </svg>
-
-    <div class="hero-subtext" id="heroSubtext">Customized Websites</div>
-
-    <div class="scroll-indicator" id="heroScrollHint">
+    <!-- Scroll hint -->
+    <div class="hero-scroll-hint" id="heroScrollHint">
+      <span>Scroll</span>
       <div class="mouse"><div class="wheel"></div></div>
     </div>
-  </section>
+  </div>
 </div>
 
 <!-- MARQUEE -->
@@ -1177,55 +1165,115 @@ footer {
 </footer>
 
 <script>
-// ── Hero scroll-based stage reveal ──
-const heroContainer = document.getElementById('heroContainer');
-const heroStages = document.querySelectorAll('.hero-stage');
-const heroConnector = document.querySelector('#heroConnector path');
-const heroSubtext = document.getElementById('heroSubtext');
-const heroScrollHint = document.getElementById('heroScrollHint');
-const heroSection = document.querySelector('.hero');
+// ── GSAP Hero: horizontal scroll with letter-by-letter animation ──
+gsap.registerPlugin(ScrollTrigger);
 
-let prevStageIndex = -1;
-
-function updateHeroStages() {
-  const containerTop = heroContainer.offsetTop;
-  const scrollable = heroContainer.offsetHeight - window.innerHeight;
-  const scrolled = window.scrollY - containerTop;
-  const progress = Math.max(0, Math.min(1, scrolled / scrollable));
-
-  // Pin hero as fixed while inside container, then snap to absolute at bottom
-  if (scrolled >= scrollable) {
-    heroSection.classList.add('hero-done');
-  } else {
-    heroSection.classList.remove('hero-done');
-  }
-
-  // 4 zones: 0-25% = KAI, 25-50% = DIGITAL, 50-75% = STUDIO, 75-100% = subtext
-  const zone = progress * 4;
-  const stageIndex = Math.min(2, Math.floor(zone));
-  const showStage = zone >= 0.15; // don't show anything until slight scroll
-
-  heroStages.forEach((stage, i) => {
-    const isActive = showStage && i === stageIndex && zone < 3.2;
-    const isExiting = showStage && i < stageIndex;
-    stage.classList.toggle('active', isActive);
-    stage.classList.toggle('exiting', isExiting);
+// Split text into individual characters
+document.querySelectorAll('.hero-word, .hero-subtext').forEach(el => {
+  const text = el.textContent;
+  el.textContent = '';
+  text.split('').forEach(char => {
+    const span = document.createElement('span');
+    span.classList.add('char');
+    span.textContent = char === ' ' ? '\u00A0' : char;
+    el.appendChild(span);
   });
+});
 
-  // Connector wave grows with progress — reveals more of the path as you scroll
-  const connectorProgress = Math.max(0, Math.min(1, (zone - 0.15) / 2.85));
-  const totalLength = 1200;
-  heroConnector.style.strokeDashoffset = totalLength * (1 - connectorProgress);
+// Horizontal scroll
+const heroTrack = document.getElementById('heroTrack');
+const totalWidth = heroTrack.scrollWidth - window.innerWidth;
 
-  // Subtext appears in the final zone
-  heroSubtext.classList.toggle('visible', zone >= 3.2);
+const heroTl = gsap.timeline({
+  scrollTrigger: {
+    trigger: '#heroHorizontal',
+    start: 'top top',
+    end: () => '+=' + totalWidth * 1.2,
+    pin: '#heroPin',
+    scrub: 0.8,
+    anticipatePin: 1,
+    onUpdate: (self) => {
+      // Animate wavy foreground lines
+      updateWaves(self.progress);
+      // Fade scroll hint
+      const hint = document.getElementById('heroScrollHint');
+      if (hint) hint.style.opacity = self.progress > 0.02 ? 0 : 1;
+    }
+  }
+});
 
-  // Hide scroll hint on scroll
-  if (heroScrollHint) heroScrollHint.classList.toggle('hidden', progress > 0.03);
+heroTl.to(heroTrack, {
+  x: -totalWidth,
+  ease: 'none'
+});
+
+// Per-character animations for each word panel
+document.querySelectorAll('.hero-word-panel').forEach((panel, panelIndex) => {
+  const chars = panel.querySelectorAll('.char');
+  if (!chars.length) return;
+
+  // Each char fades in as the panel enters and fades out as it leaves
+  chars.forEach((char, i) => {
+    const stagger = i * 0.03;
+
+    // Fade in
+    gsap.fromTo(char,
+      { opacity: 0, y: 40, rotateX: -60, scale: 0.8 },
+      {
+        opacity: 1, y: 0, rotateX: 0, scale: 1,
+        duration: 0.5,
+        delay: stagger,
+        ease: 'power3.out',
+        scrollTrigger: {
+          trigger: panel,
+          containerAnimation: heroTl,
+          start: 'left 80%',
+          end: 'left 40%',
+          scrub: 0.5,
+        }
+      }
+    );
+
+    // Fade out
+    gsap.to(char, {
+      opacity: 0, y: -30, scale: 1.1,
+      duration: 0.4,
+      delay: i * 0.02,
+      ease: 'power2.in',
+      scrollTrigger: {
+        trigger: panel,
+        containerAnimation: heroTl,
+        start: 'right 60%',
+        end: 'right 20%',
+        scrub: 0.5,
+      }
+    });
+  });
+});
+
+// Wavy foreground lines that undulate with scroll
+const wavePaths = document.querySelectorAll('#heroWaveFg path');
+
+function updateWaves(progress) {
+  const w = 1000;
+  const offsets = [0, 40, 80];
+  const amplitudes = [25, 18, 30];
+  const frequencies = [3, 4, 2.5];
+
+  wavePaths.forEach((path, i) => {
+    const amp = amplitudes[i];
+    const freq = frequencies[i];
+    const phase = progress * Math.PI * 6 + offsets[i];
+    const baseY = 100 + (i - 1) * 35;
+    let d = `M0,${baseY}`;
+    for (let x = 0; x <= w; x += 5) {
+      const y = baseY + Math.sin((x / w) * Math.PI * freq + phase) * amp;
+      d += ` L${x},${y.toFixed(1)}`;
+    }
+    path.setAttribute('d', d);
+  });
 }
-
-window.addEventListener('scroll', updateHeroStages, { passive: true });
-updateHeroStages();
+updateWaves(0);
 
 // ── Code background ──
 const codeBg = document.getElementById('codeBg');
