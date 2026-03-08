@@ -80,13 +80,24 @@ section {
 }
 
 /* ── HERO ── */
+.hero-scroll-container {
+  position: relative;
+  height: 500vh;
+}
 .hero {
+  position: sticky;
+  top: 0;
+  height: 100vh;
   background: linear-gradient(160deg, var(--navy) 0%, #3a2aae 50%, var(--blue) 100%);
   color: var(--white);
   text-align: center;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 0.5rem;
   padding: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
 }
 .hero-code-bg {
   position: absolute;
@@ -113,48 +124,60 @@ section {
   0% { transform: translateY(100%); }
   100% { transform: translateY(-100%); }
 }
-.hero-badge {
-  display: inline-block;
-  padding: 0.5rem 1.6rem;
-  border: 1px solid rgba(201,206,244,0.4);
-  border-radius: 50px;
-  font-size: 0.85rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  opacity: 0;
-  animation: fadeUp 1s 0.3s forwards;
-}
 .hero h1 {
   font-size: clamp(3rem, 8vw, 7rem);
-  line-height: 1.05;
+  line-height: 1.15;
   font-weight: 700;
+  position: relative;
+  z-index: 1;
 }
-.hero h1 .accent { color: var(--pink); }
-.hero h1 .char {
-  display: inline-block;
+.hero-word {
+  display: inline;
   opacity: 0;
-  transform: translateY(60px) rotateX(-90deg);
-  animation: charReveal 0.6s forwards;
+  filter: blur(12px);
+  transform: translateY(30px);
+  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+              filter 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
 }
-@keyframes charReveal {
-  0% { opacity: 0; transform: translateY(60px) rotateX(-90deg) scale(0.8); filter: blur(8px); }
-  60% { opacity: 1; transform: translateY(-8px) rotateX(5deg) scale(1.02); filter: blur(0); }
-  100% { opacity: 1; transform: translateY(0) rotateX(0) scale(1); filter: blur(0); }
+.hero-word.visible {
+  opacity: 1;
+  filter: blur(0);
+  transform: translateY(0);
 }
+.hero-word.accent { color: var(--pink); }
 .hero p {
   font-size: clamp(1rem, 2vw, 1.3rem);
   max-width: 600px;
   line-height: 1.7;
   text-transform: uppercase;
   letter-spacing: 0.2em;
+  position: relative;
+  z-index: 1;
   opacity: 0;
-  animation: fadeUp 1s 1.8s forwards;
+  filter: blur(12px);
+  transform: translateY(20px);
+  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+              filter 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.hero p.visible {
+  opacity: 0.85;
+  filter: blur(0);
+  transform: translateY(0);
 }
 .hero-cta {
   display: flex; gap: 1rem;
   flex-wrap: wrap; justify-content: center;
+  position: relative;
+  z-index: 1;
   opacity: 0;
-  animation: fadeUp 1s 0.9s forwards;
+  transform: translateY(20px);
+  transition: opacity 0.7s 0.2s ease, transform 0.7s 0.2s ease;
+}
+.hero-cta.visible {
+  opacity: 1;
+  transform: translateY(0);
 }
 .btn {
   display: inline-block;
@@ -179,9 +202,11 @@ section {
   bottom: 2rem;
   left: 50%;
   transform: translateX(-50%);
-  opacity: 0;
-  animation: fadeUp 1s 1.2s forwards;
+  z-index: 1;
+  opacity: 1;
+  transition: opacity 0.4s ease;
 }
+.scroll-indicator.hidden { opacity: 0; }
 .scroll-indicator .mouse {
   width: 26px; height: 42px;
   border: 2px solid rgba(255,255,255,0.5);
@@ -772,18 +797,24 @@ footer {
 </nav>
 
 <!-- HERO -->
-<section class="hero">
-  <div class="hero-code-bg" id="codeBg"></div>
-  <h1><span class="accent">Kai</span> Digital<br>Studio</h1>
-  <p>Customized Websites</p>
-  <div class="hero-cta">
-    <a href="#work" class="btn btn-primary">See Our Work</a>
-    <a href="#contact" class="btn btn-outline">Get In Touch</a>
-  </div>
-  <div class="scroll-indicator">
-    <div class="mouse"><div class="wheel"></div></div>
-  </div>
-</section>
+<div class="hero-scroll-container" id="heroContainer">
+  <section class="hero">
+    <div class="hero-code-bg" id="codeBg"></div>
+    <h1>
+      <span class="hero-word accent" data-step="0">Kai</span>
+      <span class="hero-word" data-step="1"> Digital</span><br>
+      <span class="hero-word" data-step="2">Studio</span>
+    </h1>
+    <p data-step="3">Customized Websites</p>
+    <div class="hero-cta" id="heroCta">
+      <a href="#work" class="btn btn-primary">See Our Work</a>
+      <a href="#contact" class="btn btn-outline">Get In Touch</a>
+    </div>
+    <div class="scroll-indicator" id="heroScrollHint">
+      <div class="mouse"><div class="wheel"></div></div>
+    </div>
+  </section>
+</div>
 
 <!-- MARQUEE -->
 <div class="marquee-section">
@@ -1071,19 +1102,45 @@ footer {
 </footer>
 
 <script>
-// ── Hero text animation ──
-document.querySelectorAll('.hero h1').forEach(h1 => {
-  const html = h1.innerHTML;
-  let charIndex = 0;
-  const wrapped = html.replace(/(<[^>]+>)|([^<])/g, (match, tag, char) => {
-    if (tag) return tag;
-    if (char === ' ') return ' ';
-    const delay = 0.4 + charIndex * 0.045;
-    charIndex++;
-    return `<span class="char" style="animation-delay:${delay}s">${char}</span>`;
+// ── Hero scroll-based word reveal ──
+const heroContainer = document.getElementById('heroContainer');
+const heroWords = document.querySelectorAll('.hero-word');
+const heroSub = document.querySelector('.hero p[data-step]');
+const heroCta = document.getElementById('heroCta');
+const heroScrollHint = document.getElementById('heroScrollHint');
+
+// Show "Kai" immediately on load
+setTimeout(() => {
+  const first = document.querySelector('[data-step="0"]');
+  if (first && window.scrollY < 50) first.classList.add('visible');
+}, 400);
+
+function updateHeroWords() {
+  const rect = heroContainer.getBoundingClientRect();
+  const scrollable = heroContainer.offsetHeight - window.innerHeight;
+  const progress = Math.max(0, Math.min(1, -rect.top / scrollable));
+
+  // 4 steps: 0=Kai, 1=Digital, 2=Studio, 3=subtext
+  // Each step triggers at 0%, 25%, 50%, 75%
+  const step = progress * 4;
+
+  heroWords.forEach(w => {
+    const s = parseInt(w.dataset.step);
+    w.classList.toggle('visible', step >= s + 0.1);
   });
-  h1.innerHTML = wrapped;
-});
+
+  // Subtext at step 3
+  if (heroSub) heroSub.classList.toggle('visible', step >= 3.1);
+
+  // CTA appears with subtext
+  if (heroCta) heroCta.classList.toggle('visible', step >= 3.4);
+
+  // Hide scroll hint after first scroll
+  if (heroScrollHint) heroScrollHint.classList.toggle('hidden', progress > 0.05);
+}
+
+window.addEventListener('scroll', updateHeroWords, { passive: true });
+updateHeroWords();
 
 // ── Code background ──
 const codeBg = document.getElementById('codeBg');
