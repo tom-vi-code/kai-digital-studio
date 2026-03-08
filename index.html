@@ -121,17 +121,27 @@ section {
   font-size: clamp(3rem, 8vw, 7rem);
   line-height: 1.05;
   font-weight: 700;
-  opacity: 0;
-  animation: fadeUp 1s 0.5s forwards;
 }
 .hero h1 .accent { color: var(--pink); }
+.hero h1 .char {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(60px) rotateX(-90deg);
+  animation: charReveal 0.6s forwards;
+}
+@keyframes charReveal {
+  0% { opacity: 0; transform: translateY(60px) rotateX(-90deg) scale(0.8); filter: blur(8px); }
+  60% { opacity: 1; transform: translateY(-8px) rotateX(5deg) scale(1.02); filter: blur(0); }
+  100% { opacity: 1; transform: translateY(0) rotateX(0) scale(1); filter: blur(0); }
+}
 .hero p {
   font-size: clamp(1rem, 2vw, 1.3rem);
   max-width: 600px;
   line-height: 1.7;
-  opacity: 0.85;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
   opacity: 0;
-  animation: fadeUp 1s 0.7s forwards;
+  animation: fadeUp 1s 1.8s forwards;
 }
 .hero-cta {
   display: flex; gap: 1rem;
@@ -1054,6 +1064,20 @@ footer {
 </footer>
 
 <script>
+// ── Hero text animation ──
+document.querySelectorAll('.hero h1').forEach(h1 => {
+  const html = h1.innerHTML;
+  let charIndex = 0;
+  const wrapped = html.replace(/(<[^>]+>)|([^<])/g, (match, tag, char) => {
+    if (tag) return tag;
+    if (char === ' ') return ' ';
+    const delay = 0.4 + charIndex * 0.045;
+    charIndex++;
+    return `<span class="char" style="animation-delay:${delay}s">${char}</span>`;
+  });
+  h1.innerHTML = wrapped;
+});
+
 // ── Particles ──
 const particlesEl = document.getElementById('particles');
 for (let i = 0; i < 40; i++) {
