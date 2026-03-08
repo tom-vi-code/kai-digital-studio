@@ -92,12 +92,14 @@ section {
 }
 .hero-track {
   display: flex;
+  flex-wrap: nowrap;
   height: 100%;
-  width: 400vw; /* 4 panels */
   will-change: transform;
 }
 .hero-panel {
+  flex: 0 0 100vw;
   width: 100vw;
+  min-width: 100vw;
   height: 100vh;
   display: flex;
   align-items: center;
@@ -1183,8 +1185,8 @@ function updateHero() {
   const scrollDistance = wrapperHeight - window.innerHeight;
   const progress = Math.max(0, Math.min(1, -rect.top / scrollDistance));
 
-  // Move track horizontally
-  const maxTranslate = heroTrack.scrollWidth - window.innerWidth;
+  // Move track horizontally (4 panels, so 3 panels of travel)
+  const maxTranslate = 3 * window.innerWidth;
   heroTrack.style.transform = `translateX(${-progress * maxTranslate}px)`;
 
   // Show/hide progress dots
